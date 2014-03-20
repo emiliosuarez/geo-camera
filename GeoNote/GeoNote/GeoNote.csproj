@@ -215,6 +215,11 @@
     <Content Include="Images\Awesome.jpg" />
     <Content Include="Images\GeoNote100.png" />
     <Content Include="Images\GeoNote400.png" />
+    <Content Include="Images\img1.jpg" />
+    <Content Include="Images\img2.jpg" />
+    <Content Include="Images\img3.jpg" />
+    <Content Include="Images\img4.jpg" />
+    <Content Include="Images\img5.jpg" />
     <Content Include="Images\Test1.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

@@ -7,6 +7,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
+    using System.Web.Http.Cors;
     using System.Web.Mvc;
 
     public class ImageController : Controller
@@ -34,6 +35,23 @@
             }
 
             return View(imgs);
+        }
+
+        public ActionResult UpdateNotes(Image img)
+        {
+
+            return RedirectToAction("Images");
+        }
+
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        public ActionResult SaveImage(Image img)
+        {
+            DataAccessor access = new DataAccessor();
+            Image image = img;
+
+            access.SaveImage(image);
+
+            return RedirectToAction("Images");
         }
 	}
 }
