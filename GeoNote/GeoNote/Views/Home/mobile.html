@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+    <title>My Page</title>
+    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css">
+    <link rel="stylesheet" href="css/main.css"/>
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
+</head>
+<body>
+<div data-role="page" id="home">
+
+    <div data-role="header">
+        <h1>Geo Note</h1>
+    </div>
+
+    <div data-role="content">
+        <input type="file" capture="camera" accept="image/*" id="takePictureField">
+        <img id="imageCapture">
+    </div>
+
+    <div class="button-center" data-role="footer">
+        <a id="capture" href="#detail" data-role="button" data-icon="star">Details</a>
+    </div>
+
+</div>
+<div data-role="page" id="detail">
+
+    <div data-role="header">
+        <a href="#home" data-role="button" data-icon="star" data-rel="back">Back</a>
+        <h1>Geo Note</h1>
+    </div>
+
+    <div data-role="content">
+        <div data-role="fieldcontain">
+            <label for="name">Jira Ticket:</label>
+            <input id="jiraId" type="text" name="name" id="name" value=""  />
+        </div>
+
+        <div data-role="fieldcontain">
+            <label for="textarea">Notes:</label>
+            <textarea id="notes" rows="8" name="textarea" id="textarea"></textarea>
+        </div>
+
+        <img id="imageDetail">
+        <div id="message">Geo Data</div>
+    </div>
+
+    <div class="button-center" data-role="footer">
+        <a id="submit" data-role="button" data-icon="star" onclick="submitData()">Submit</a>
+    </div>
+</div>
+<script>
+
+    /*** Image Capture ***/
+    var desiredWidth;
+    var fileRef;
+
+    $(document).ready(function() {
+
+        $("#takePictureField").on("change",gotPic);
+
+        desiredWidth = window.innerWidth;
+
+        if(!("url" in window) && ("webkitURL" in window)) {
+            window.URL = window.webkitURL;
+        }
+
+        navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
+
+        Parse.initialize("SDdSdVJx5qSfzBqJKnSkGWDSNGQt1ngcURDMUhaZ", "fQLphCE8G7MkvwphmOUaJIfGKb9BRECfW2IihJeL");
+    });
+
+    //Credit: https://www.youtube.com/watch?v=EPYnGFEcis4&feature=youtube_gdata_player
+    function gotPic(event) {
+        if(event.target.files.length == 1 &&
+                event.target.files[0].type.indexOf("image/") == 0) {
+            fileRef = event.target.files[0];
+            $("#imageCapture").attr("src",URL.createObjectURL(event.target.files[0]));
+            $("#imageDetail").attr("src",URL.createObjectURL(event.target.files[0]));
+        }
+    }
+
+    /*** Geo Location ***/
+    function successHandler(location) {
+        var message = document.getElementById("message"), html = [];
+        html.push("<img width='100%' src='http://maps.google.com/maps/api/staticmap?center=",
+                location.coords.latitude, ",",
+                location.coords.longitude,
+                "&markers=size:small|color:red|",
+                location.coords.latitude, ",",
+                location.coords.longitude,
+                "&zoom=14&size=256x256&sensor=false' />");
+        html.push("<div id='long'>Longitude: ", (location.coords.longitude).toFixed(3), "</div>");
+        html.push("<div id='lat'>Latitude: ", (location.coords.latitude).toFixed(3), "</div>");
+        message.innerHTML = html.join("");
+    }
+
+    function errorHandler(error) {
+        alert('Attempt to get location failed: ' + error.message);
+    }
+
+    function submitData()
+    {
+        var fileUploadControl = $("#takePictureField")[0];
+        if (fileUploadControl.files.length > 0) {
+            var file = fileUploadControl.files[0];
+            var imageName = "testImg01.jpg";
+            var parseFile = new Parse.File(imageName, file);
+
+            parseFile.save().then(function(d) {
+
+                var data = {}
+                data.jiraId =  $('#jiraId').val();
+                data.notes =  $('#notes').val();
+                data.longitude = $('#long').text().split(':')[1].trim();
+                data.latitude = $('#lat').text().split(':')[1].trim();
+                data.imageId = d._url;
+                data.cameraId = 1;
+                data.albumId = 1;
+
+                var ImageData = Parse.Object.extend("ImageData");
+                var imageData = new ImageData();
+
+                /*imageData.set(imgName, d._url);
+                 imageData.set(imgId, data.imageId);
+                 imageData.save(null, {
+                 success: function(object) {
+                 $(".success").show();
+                 },
+                 error: function(model, error) {
+                 $(".error").show();
+                 }
+                 });*/
+
+                doAjax(data);
+
+            }, function(error) {
+                console.log('error');
+            });
+        }
+    }
+
+    function doAjax(data){
+        $.ajax({url: "http://geonote-gen.azurewebsites.net/",
+            data: data,
+            async: true,
+            type: "post",
+            success: function (result) {
+                console.log('Lift Off!"')
+            },
+            error: function (request,error) {
+                console.log('Houston we have a problem!!"');
+            }
+        });
+    }
+
+    //http://files.parse.com/c6e05e1f-a4f9-4bd5-9edb-9f4df3bcec21/d4609f15-1225-4339-a068-b70fd50e77a4-testImg01.jpg
+</script>
+</body>
+</html>
