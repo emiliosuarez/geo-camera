@@ -9,50 +9,31 @@
     <link rel="stylesheet" href="css/main.css"/>
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-    <style>
-        #yourimage {
-            width:100%;
-        }
-
-        #swatches {
-            width: 100%;
-            height: 50px;
-        }
-
-        .swatch {
-            width:18%;
-            height: 50px;
-            border-style:solid;
-            border-width:thin;
-            float: left;
-            margin-right: 3px;
-        }
-    </style>
 </head>
 <body>
     <div data-role="page" id="home">
 
         <div data-role="header">
-            <h1>Quick SnAPP</h1>
+            <h1>Geo Note</h1>
         </div>
 
         <div data-role="content">
-            <p>Camera Canvas</p>
+
             <input type="file" capture="camera" accept="image/*" id="takePictureField">
+            <img id="imageCapture">
 
-            <img id="yourimage">
-
-            <div id="swatches">
+            <!--<div id="swatches">
                 <div id="swatch0" class="swatch"></div>
                 <div id="swatch1" class="swatch"></div>
                 <div id="swatch2" class="swatch"></div>
                 <div id="swatch3" class="swatch"></div>
                 <div id="swatch4" class="swatch"></div>
-            </div>
+            </div>-->
+
         </div>
 
         <div class="button-center" data-role="footer">
-            <a id="capture" href="#" data-role="button" data-icon="star">Capture</a>
+           <a id="capture" href="#detail" data-role="button" data-icon="star">Details</a>
         </div>
 
     </div>
@@ -60,47 +41,72 @@
 
         <div data-role="header">
             <a href="#home" data-role="button" data-icon="star" data-rel="back">Back</a>
-            <h1>Quick SnAPP</h1>
+            <h1>Geo Note</h1>
         </div>
 
         <div data-role="content">
-            <p>Boby Placeholder</p>
+            <div data-role="fieldcontain">
+                <label for="name">Jira Ticket:</label>
+                <input type="text" name="name" id="name" value=""  />
+            </div>
+
+            <div data-role="fieldcontain">
+                <label for="textarea">Notes:</label>
+                <textarea rows="8" name="textarea" id="textarea"></textarea>
+            </div>
+
+            <img id="imageDetail">
+            <div id="message">Geo Data</div>
         </div>
 
         <div class="button-center" data-role="footer">
             <a href="#" data-role="button" data-icon="star">Submit</a>
         </div>
-
     </div>
     <script>
+
+        /*** Image Capture ***/
         var desiredWidth;
 
         $(document).ready(function() {
             console.log('onReady');
             $("#takePictureField").on("change",gotPic);
-            $("#yourimage").load(getSwatches);
             desiredWidth = window.innerWidth;
 
             if(!("url" in window) && ("webkitURL" in window)) {
                 window.URL = window.webkitURL;
             }
 
+            navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
         });
-
-        function getSwatches(){
-            var colorArr = createPalette($("#yourimage"), 5);
-            for (var i = 0; i < Math.min(5, colorArr.length); i++) {
-                $("#swatch"+i).css("background-color","rgb("+colorArr[i][0]+","+colorArr[i][1]+","+colorArr[i][2]+")");
-                console.log($("#swatch"+i).css("background-color"));
-            }
-        }
 
         //Credit: https://www.youtube.com/watch?v=EPYnGFEcis4&feature=youtube_gdata_player
         function gotPic(event) {
             if(event.target.files.length == 1 &&
                     event.target.files[0].type.indexOf("image/") == 0) {
-                $("#yourimage").attr("src",URL.createObjectURL(event.target.files[0]));
+                $("#imageCapture").attr("src",URL.createObjectURL(event.target.files[0]));
+                $("#imageDetail").attr("src",URL.createObjectURL(event.target.files[0]));
             }
+        }
+
+        /*** Geo Location ***/
+        function successHandler(location) {
+            var message = document.getElementById("message"), html = [];
+            html.push("<img width='100%' src='http://maps.google.com/maps/api/staticmap?center=",
+                    location.coords.latitude, ",",
+                    location.coords.longitude,
+                    "&markers=size:small|color:red|",
+                    location.coords.latitude, ",",
+                    location.coords.longitude,
+                    "&zoom=14&size=256x256&sensor=false' />");
+            html.push("<div>Longitude: ", (location.coords.longitude).toFixed(3), "</div>");
+            html.push("<div>Latitude: ", (location.coords.latitude).toFixed(3), "</div>");
+            html.push("<div>Accuracy: ", location.coords.accuracy, " meters</div>");
+            message.innerHTML = html.join("");
+        }
+
+        function errorHandler(error) {
+            alert('Attempt to get location failed: ' + error.message);
         }
 
     </script>
