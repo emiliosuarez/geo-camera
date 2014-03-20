@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <img src="~/Images/GeoNote400.png" />
+    <p class="lead">Welcome to GeoNote! Within lies the photographs and data that you have taken! You can add details and use some fancy GIS tools (Google Maps)</p>
+    <p class="lead">to even move something if for some unheard of reason computers and satellites and 1980s Russian Technology has failed you (or us).</p>
+    <p><a href="http://www.genscape.com" class="btn btn-primary btn-large">Learn more &raquo;....ABOUT GENSCAPE!</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Images</h2>
+        <p>
+            Below you can head to your images page that has all your fancy images (Read: Poorly framed, poorly lit, blurry cat pictures)!
+        </p>
+        <p><a href="@Url.Action("Images", "Image", new { })">Images &gt;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>View Map!</h2>
+        <p>We're mapping the places you took the photos, kind of like the NSA (Only we're the good guys?)!</p>
+        <p><a href="@Url.Action("Maps", "News", new { Images = Model })">Read More &gt;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Other Stuff:</h2>
+        <p>In the future we're going to do some amazing things with this! We're looking at you bird watchers!</p>
+        <p></p>
+    </div>
+</div>
