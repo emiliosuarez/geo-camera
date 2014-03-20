@@ -62,3 +62,10 @@ c:\users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\obj\Debug\Geo
 c:\users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\obj\Debug\GeoNote.pdb
 c:\users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\bin\HelloWorld.exe
 c:\users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\bin\HelloWorld.pdb
+C:\Users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\bin\System.Net.Http.Formatting.dll
+C:\Users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\bin\System.Web.Cors.dll
+C:\Users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\bin\System.Web.Http.Cors.dll
+C:\Users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\bin\System.Web.Http.dll
+C:\Users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\bin\System.Net.Http.Formatting.xml
+C:\Users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\bin\System.Web.Http.xml
+C:\Users\mac\documents\visual studio 2013\Projects\GeoNote\GeoNote\bin\System.Web.Http.Cors.xml

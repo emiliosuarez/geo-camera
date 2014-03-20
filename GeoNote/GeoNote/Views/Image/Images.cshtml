@@ -6,9 +6,9 @@
 }
 
 @if (Model != null && Model.Count > 0)
-        {
-<div>
-    
+{
+    <div>
+
         <table id="imagesTable" class="">
             <thead>
                 <tr>
@@ -20,12 +20,37 @@
             </thead>
             <tbody>
                 @foreach (GeoNote.Models.Image img in Model)
-                    {
+                {
+                   
+                    string filename = string.Empty;
+                    var baseUrl = Url.Action("", "Images");
+                    filename = baseUrl + "/" + img.ImageName + ".jpg";
+                    
+                    <div class="modal fade" id="@img.ImageName" tabindex="-1" role="dialog" aria-labelledby="@img.JiraId" aria-hidden="true">
+                        <div class="modal-dialog" style="width: 950px;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="@img.JiraId">@img.ImageName</h4>
+                                </div>
+                                <div class="modal-body" style="width: 920px;">
+                                    <img src=@filename style="height:auto;width:800px"/>
+                                </div>
+                                <div class="modal-footer" style="width: 920px;">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <tr>
                         <td>
                             @*@{string path = System.Web.Configuration.WebConfigurationManager.AppSettings["filePath"] + "/" + img.ImageName + ".jpg"; }*@
-                            @{string path = "~/Images/"; }
-                            <a href="@Url.Content(path)">@img.ImageName</a>
+                            <a data-toggle="modal" data-target="#@img.ImageName" data-img-url=@filename>
+                                <img src=@filename alt="Daily Production Metrics" style="height:auto;width:320px; cursor: pointer" />
+                            </a>
+
+                            @*<img src="@filename" />*@
+                            @*<a href="@Url.Content(path)">@img.ImageName</a>*@
                         </td>
                         <td>
                             @img.Latitude
@@ -37,33 +62,33 @@
                             @img.DateUploaded
                         </td>
                     </tr>
-                    }
+                }
             </tbody>
         </table>
         <br>
         <div>
             Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
             @if (Model.HasPreviousPage)
-                {
+            {
                 @Html.ActionLink("<<", "Images", new { page = 1 })
                 @Html.Raw(" ");
                 @Html.ActionLink("< Prev", "Images", new { page = Model.PageNumber - 1 })
-                }
-                else
-                {
+            }
+            else
+            {
                 @:<<
                 @Html.Raw(" ");
                 @:< Prev
                 }
 
             @if (Model.HasNextPage)
-                {
+            {
                 @Html.ActionLink("Next >", "Images", new { page = Model.PageNumber + 1 })
                 @Html.Raw(" ");
                 @Html.ActionLink(">>", "Images", new { page = Model.PageCount })
-                }
-                else
-                {
+            }
+            else
+            {
                 @:Next >
                 @Html.Raw(" ")
                 @:>>
@@ -74,5 +99,5 @@
 }
 else
 {
-<h3>NO IMAGES TO CURRENTLY DISPLAY</h3>
+    <h3>NO IMAGES TO CURRENTLY DISPLAY</h3>
 }

@@ -24,5 +24,7 @@
         public bool IsAlbum { get; set; }
 
         public DateTime DateUploaded { get; set; }
+
+        public int? CameraId { get; set; }
     }
 }

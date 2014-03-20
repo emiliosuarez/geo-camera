@@ -37,6 +37,20 @@
             }
         }
 
+        public T QueryForData<T>(string query, dynamic parameters = null) where T : class
+        {
+            List<T> item = PerformQuery<T>(query, parameters);
+
+            if (item != null && item.Count > 0)
+            {
+                return item.FirstOrDefault();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public List<T> PerformQuery<T>(string query, dynamic parameters) where T : class
         {
             IDbTransaction trans = null;
@@ -77,6 +91,18 @@
             images = PerformQuery<Image>("select * from Images", new { });
 
             return images;
+        
+        }
+
+        public void SaveImage(Image img)
+        {
+            Image image = new Image();
+
+            //set datetime.now, isalbum to 0, albumid 1, cameraid -1
+            image = QueryForData<Image>("Insert into Images (ImageName, AlbumID, JiraID, Latitude, Longitude, Notes, IsAlbum, DateUploaded, CameraId)" +
+             "Values(@ImageName, @AlbumId, @JiraID, @Latitude, @Longitude, @Notes, @IsAlbum, @DateUploaded, @CameraId",
+                new { ImageName = img.ImageName, AlbumId = 1, JiraID = img.JiraId, Latitude = img.Latitude, Longitude = img.Longitude,
+                Notes = img.Notes, IsAlbum = 0, DateUploaded = DateTime.Now, CameraId = -1});
         }
     }
 }

@@ -13,6 +13,8 @@ namespace GeoNote
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.IgnoreRoute("mobile.html");
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

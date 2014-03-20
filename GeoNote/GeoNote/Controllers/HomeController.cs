@@ -10,24 +10,32 @@
     using PagedList;
     using GeoNote.DataAccess;
     using GeoNote.Models;
+    using System.Web.Http.Cors;
 
     public class HomeController : Controller
     {
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public ActionResult Index()
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+            return View();
+        }
+
+        public ActionResult mobile()
         {
             return View();
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "What is GeoNote?";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "GeoNote Contact.";
 
             return View();
         }
