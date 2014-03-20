@@ -73,6 +73,8 @@
             navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
 
             Parse.initialize("SDdSdVJx5qSfzBqJKnSkGWDSNGQt1ngcURDMUhaZ", "fQLphCE8G7MkvwphmOUaJIfGKb9BRECfW2IihJeL");
+
+
         });
 
         //Credit: https://www.youtube.com/watch?v=EPYnGFEcis4&feature=youtube_gdata_player
@@ -114,28 +116,29 @@
 
                 parseFile.save().then(function(d) {
 
-                    var data = {}
-                    data.JiraId =  $('#jiraId').val();
-                    data.Notes =  $('#notes').val();
-                    data.Longitude = $('#long').text().split(':')[1].trim();
-                    data.Latitude = $('#lat').text().split(':')[1].trim();
-                    data.ImageId = d._url;
+                    alert("image saved");
 
-                    //var ImageData = Parse.Object.extend("ImageData");
-                    //var imageData = new ImageData();
+                    var ImageData = Parse.Object.extend("ImageData");
+                    var imageData = new ImageData();
 
-                    /*imageData.set(imgName, imageName);
-                    imageData.set(imgId, d._url);
+                    imageData.set("imgId", d._url);
+                    imageData.set("jiraId", $('#jiraId').val());
+                    imageData.set("notes", $('#notes').val());
+                    imageData.set("long", $('#long').text().split(':')[1].trim());
+                    imageData.set("lat", $('#lat').text().split(':')[1].trim());
+
                     imageData.save(null, {
                         success: function(object) {
-                            $(".success").show();
+                            //$(".success").show();
+                            alert("Data Save Success");
                         },
                         error: function(model, error) {
-                            $(".error").show();
+                            //$(".error").show();
+                            alert("Data Save Error");
                         }
-                    });*/
+                    });
 
-                    doAjax(JSON.stringify(data));
+                    //doAjax(JSON.stringify(data));
 
                 }, function(error) {
                     console.log('error');
@@ -144,7 +147,7 @@
         }
 
         function doAjax(data){
-            $.ajax({url: "http://geonote-gen.azurewebsites.net/Producer/SaveAttachments",
+            $.ajax({url: "http://geonote-gen.azurewebsites.net/Image/SaveImage",
                 data : data,
                 async: true,
                 type: "post",
