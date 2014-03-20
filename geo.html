@@ -3,6 +3,9 @@
 <head>
     <title>Geolocation API Demo</title>
     <meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" name="viewport"/>
+    <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.2.min.css">
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
+
     <script>
         function successHandler(location) {
             var message = document.getElementById("message"), html = [];
@@ -24,7 +27,15 @@
         navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
     </script>
 </head>
-<body>
-<div id="message">Location unknown</div>
+<body >
+<div data-role="page" >
+    <div data-role="content" class="ui-content">
+        <h4>Review Image</h4>
+        <div id="message">Location unknown</div>
+    </div>
+    <div data-role="footer">
+        <button class="ui-btn ui-btn-active">Submit</button>
+    </div>
+</div>
 </body>
 </html>
