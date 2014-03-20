@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+    <title>Images</title>
+    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css">
+    <link rel="stylesheet" href="css/main.css"/>
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+</head>
+<body>
+<div data-role="page" id="home">
+
+    <div data-role="header">
+        <h1>Geo Note Images</h1>
+    </div>
+
+    <div data-role="content" >
+        <table id="imagelist" class="table ">
+            <thead>
+                <th>Jira ID</th>
+                <th>Lat</th>
+                <th>Long</th>
+                <th>Notes</th>
+                <th>Image</th>
+                <th>Delete</th>
+            </thead>
+        </table>
+    </div>
+
+
+</div>
+<script>
+
+    $(document).ready(function() {
+        Parse.initialize("SDdSdVJx5qSfzBqJKnSkGWDSNGQt1ngcURDMUhaZ", "fQLphCE8G7MkvwphmOUaJIfGKb9BRECfW2IihJeL");
+        loadData();
+
+    });
+
+
+    function loadData() {
+        var ImageData = Parse.Object.extend("ImageData");
+        var imageData = new ImageData();
+        var ImageDataCollection = Parse.Collection.extend({
+            model: ImageData
+        });
+        var collection = new ImageDataCollection();
+        collection.fetch({
+            success: function(collection) {
+                collection.each(function(object) {
+                    $('#imagelist').append("<tr>" +
+                    "<td>" +  object.get("jiraId") + "</td>" +
+                    "<td>" +  object.get("lat") + "</td>" +
+                    "<td>" +  object.get("long") + "</td>" +
+                    "<td>" +  object.get("notes") + "</td>" +
+                    "<td><img src='" +  object.get("imgId") + "' width='200px'></td>" +
+                    "<td><button class='btn btn-danger' onclick='deleteRow(\"" + object.id + "\")'>X</button></td>" +
+                    "</tr>")
+                });
+            },
+            error: function(collection, error) {
+                // The collection could not be retrieved.
+            }
+        });
+    };
+
+    function deleteRow(objectId) {
+        console.log(objectId);
+        var ImageData = Parse.Object.extend("ImageData");
+        var query = new Parse.Query(ImageData);
+        query.get(objectId+"", {
+            success: function(imageData) {
+                // The object was retrieved successfully.
+                console.dir(imageData)
+                imageData.destroy({
+                    success: function(myObject) {
+                        // The object was deleted from the Parse Cloud.
+                        alert("Row deleted successfully")
+                        window.location="images.html"
+                    },
+                    error: function(myObject, error) {
+                        // The delete failed.
+                        // error is a Parse.Error with an error code and description.
+                        alert("Error deleting row")
+                    }
+                });
+            },
+            error: function(object, error) {
+                // The object was not retrieved successfully.
+                // error is a Parse.Error with an error code and description.
+            }
+        });
+    };
+
+</script>
+</body>
+</html>
