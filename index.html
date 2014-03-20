@@ -4,7 +4,6 @@
     <title>My Page</title>
     <meta name="viewport" content="width=320; user-scalable=no" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css">
     <link rel="stylesheet" href="css/main.css"/>
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
@@ -14,7 +13,7 @@
 <body>
     <div data-role="page" id="home">
 
-        <div data-role="header">
+        <div data-role="header" data-position="fixed">
             <h1>Geo Note</h1>
         </div>
 
@@ -23,14 +22,14 @@
             <img id="imageCapture">
         </div>
 
-        <div class="button-center" data-role="footer">
+        <div class="button-center" data-role="footer" data-position="fixed">
            <a id="capture" href="#detail" data-role="button" data-icon="star">Details</a>
         </div>
 
     </div>
     <div data-role="page" id="detail">
 
-        <div data-role="header">
+        <div data-role="header" data-position="fixed">
             <a href="#home" data-role="button" data-icon="star" data-rel="back">Back</a>
             <h1>Geo Note</h1>
         </div>
@@ -50,7 +49,7 @@
             <div id="message">Geo Data</div>
         </div>
 
-        <div class="button-center" data-role="footer">
+        <div class="button-center" data-role="footer" data-position="fixed">
             <a id="submit" data-role="button" data-icon="star" onclick="submitData()">Submit</a>
         </div>
     </div>
@@ -74,7 +73,6 @@
 
             Parse.initialize("SDdSdVJx5qSfzBqJKnSkGWDSNGQt1ngcURDMUhaZ", "fQLphCE8G7MkvwphmOUaJIfGKb9BRECfW2IihJeL");
 
-
         });
 
         //Credit: https://www.youtube.com/watch?v=EPYnGFEcis4&feature=youtube_gdata_player
@@ -97,8 +95,8 @@
                     location.coords.latitude, ",",
                     location.coords.longitude,
                     "&zoom=14&size=256x256&sensor=false' />");
-            html.push("<div id='long'>Longitude: ", (location.coords.longitude).toFixed(3), "</div>");
-            html.push("<div id='lat'>Latitude: ", (location.coords.latitude).toFixed(3), "</div>");
+            html.push("<span id='long'>Longitude: ", (location.coords.longitude).toFixed(3), "</span>");
+            html.push("<span id='lat'>Latitude: ", (location.coords.latitude).toFixed(3), "</span>");
             message.innerHTML = html.join("");
         }
 
@@ -118,22 +116,29 @@
 
                     alert("image saved");
 
+                    /*var data = {}
+                    data.JiraId =  $('#jiraId').val();
+                    data.Notes =  $('#notes').val();
+                    data.Longitude = $('#long').text().split(':')[1].trim();
+                    data.Latitude = $('#lat').text().split(':')[1].trim();
+                    data.ImageId = d._url;*/
+
                     var ImageData = Parse.Object.extend("ImageData");
                     var imageData = new ImageData();
 
                     imageData.set("imgId", d._url);
                     imageData.set("jiraId", $('#jiraId').val());
                     imageData.set("notes", $('#notes').val());
-                    imageData.set("long", $('#long').text().split(':')[1].trim());
-                    imageData.set("lat", $('#lat').text().split(':')[1].trim());
+                    imageData.set("long", $('#long').text().split(':')[1]);
+                    imageData.set("lat", $('#lat').text().split(':')[1]);
 
                     imageData.save(null, {
                         success: function(object) {
-                            //$(".success").show();
-                            alert("Data Save Success");
+                            $('#imageCapture').attr('src', null);
+                            $("#imageDetail").attr("src", null);
+                            window.history.back();
                         },
                         error: function(model, error) {
-                            //$(".error").show();
                             alert("Data Save Error");
                         }
                     });
