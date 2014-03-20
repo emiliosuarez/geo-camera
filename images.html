@@ -29,6 +29,7 @@
                 <th>Long</th>
                 <th>Notes</th>
                 <th>Image</th>
+                <th>Map</th>
                 <th>Delete</th>
             </thead>
         </table>
@@ -55,12 +56,17 @@
         collection.fetch({
             success: function(collection) {
                 collection.each(function(object) {
+                    var lat = object.get("lat")
+                    var long = object.get("long")
                     $('#imagelist').append("<tr>" +
-                    "<td>" +  object.get("jiraId") + "</td>" +
-                    "<td>" +  object.get("lat") + "</td>" +
-                    "<td>" +  object.get("long") + "</td>" +
-                    "<td>" +  object.get("notes") + "</td>" +
+                    "<td>" + object.get("jiraId") + "</td>" +
+                    "<td>" + lat + "</td>" +
+                    "<td>" + long + "</td>" +
+                    "<td>" + object.get("notes") + "</td>" +
                     "<td><img src='" +  object.get("imgId") + "' width='200px'></td>" +
+                    "<td><img width='200' height='200' src='http://maps.google.com/maps/api/staticmap?center=" +
+                            lat + "," +long + "&markers=size:big|color:red|" +
+                            lat + "," +long + "&zoom=14&size=200x200&sensor=false' />)</td>" +
                     "<td><button class='btn btn-danger' onclick='deleteRow(\"" + object.id + "\")'>X</button></td>" +
                     "</tr>")
                 });
