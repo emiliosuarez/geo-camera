@@ -115,19 +115,17 @@
                 parseFile.save().then(function(d) {
 
                     var data = {}
-                    data.jiraId =  $('#jiraId').val();
-                    data.notes =  $('#notes').val();
-                    data.longitude = $('#long').text().split(':')[1].trim();
-                    data.latitude = $('#lat').text().split(':')[1].trim();
-                    data.imageId = d._url;
-                    data.cameraId = 1;
-                    data.albumId = 1;
+                    data.JiraId =  $('#jiraId').val();
+                    data.Notes =  $('#notes').val();
+                    data.Longitude = $('#long').text().split(':')[1].trim();
+                    data.Latitude = $('#lat').text().split(':')[1].trim();
+                    data.ImageId = d._url;
 
-                    var ImageData = Parse.Object.extend("ImageData");
-                    var imageData = new ImageData();
+                    //var ImageData = Parse.Object.extend("ImageData");
+                    //var imageData = new ImageData();
 
-                    /*imageData.set(imgName, d._url);
-                    imageData.set(imgId, data.imageId);
+                    /*imageData.set(imgName, imageName);
+                    imageData.set(imgId, d._url);
                     imageData.save(null, {
                         success: function(object) {
                             $(".success").show();
@@ -137,7 +135,7 @@
                         }
                     });*/
 
-                    doAjax(data);
+                    doAjax(JSON.stringify(data));
 
                 }, function(error) {
                     console.log('error');
@@ -146,10 +144,11 @@
         }
 
         function doAjax(data){
-            $.ajax({url: "http://geonote-gen.azurewebsites.net/",
-                data: data,
+            $.ajax({url: "http://geonote-gen.azurewebsites.net/Producer/SaveAttachments",
+                data : data,
                 async: true,
                 type: "post",
+                dataType: "json",
                 success: function (result) {
                     console.log('Lift Off!"')
                 },
